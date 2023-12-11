@@ -92,7 +92,16 @@ class DataProcess:
         merged_df = pd.merge(df1, df2, left_on=['dbn', 'schoolyear'], right_on=['DBN', 'mapped_schoolyear'], how='left')
         merged_df.drop(columns=columns_to_drop, axis=1, inplace=True)
 
+        merged_df.dropna(subset=['Total Grads - % of cohort'], inplace=True)
+
         return merged_df
+
+    def replace_ell_percent_nulls_with_median(self, df):
+        median_ell_percent = df['ell_percent'].median()
+
+        df['ell_percent'].fillna(median_ell_percent, inplace=True)
+
+        return df
 
     
 

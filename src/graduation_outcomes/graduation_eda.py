@@ -6,20 +6,6 @@ class EDAPerformer:
     def __init__(self,df):
         self.df=df
 
-    def convert_columns_to_numeric(self, columns_to_convert):
-        """
-        Converts specified columns to numeric data type.
-
-        Parameters:
-        columns_to_convert (list): A list of column names to be converted.
-        """
-        for column in columns_to_convert:
-            self.df[column] = pd.to_numeric(self.df[column], errors='coerce')
-        return self.df
-
-    def unique_value_counts(self, column_name):
-        return self.df[column_name].value_counts(dropna=True)
-
     def describe_stats(self, column_name):
         return self.df[column_name].describe()
 
@@ -81,3 +67,25 @@ class EDAPerformer:
         sns.heatmap(self.df.corr(), annot=True, fmt=".2f", cmap='coolwarm')
         plt.title('Heatmap of Correlation')
         plt.show()
+
+    def plot_histogram_and_boxplot(self, column):
+        fig, axes = plt.subplots(1, 2, figsize=(15, 6))
+
+        # 绘制直方图
+        sns.histplot(data=self.df, x=column, bins=30, kde=True, ax=axes[0])
+        axes[0].set_title(f'Histogram of {column}')
+        axes[0].set_xlabel(column)
+        axes[0].set_ylabel('Frequency')
+
+        # 绘制箱线图
+        sns.boxplot(data=self.df, x=column, ax=axes[1])
+        axes[1].set_title(f'Boxplot of {column}')
+        axes[1].set_xlabel(column)
+
+        plt.tight_layout()
+        plt.show()
+
+    def plot_all_columns(self):
+        numeric_columns = self.df.select_dtypes(include=['number']).columns
+        for column in numeric_columns:
+            self.plot_histogram_and_boxplot(column)
