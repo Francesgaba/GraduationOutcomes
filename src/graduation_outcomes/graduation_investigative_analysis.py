@@ -56,6 +56,34 @@ class InvestigativeAnalysis:
         plt.tight_layout()
         plt.show()
 
+    def plot_graduation_vs_ell_sped(self):
+        plt.figure(figsize=(10,4))
+
+        # Scatter plot for ell_percent vs. Graduation rates
+        plt.subplot(1, 2, 1)
+        plt.scatter(self.df['ell_percent'], self.df['Total Grads - % of cohort'], color='blue', label='ELL vs. Graduation Rate')
+        # Fit line for ELL percentage vs Graduation rate
+        m, b = np.polyfit(self.df['ell_percent'], self.df['Total Grads - % of cohort'], 1)
+        plt.plot(self.df['ell_percent'], m*self.df['ell_percent'] + b, color='blue', linestyle='-', linewidth=1)
+        plt.title('ELL Percentage vs. Graduation Rate')
+        plt.xlabel('ELL Percentage')
+        plt.ylabel('Graduation Rate (%)')
+        plt.legend()
+
+        # Scatter plot for sped_percent vs. Graduation rates
+        plt.subplot(1, 2, 2)
+        plt.scatter(self.df['sped_percent'], self.df['Total Grads - % of cohort'], color='green', label='SpEd vs. Graduation Rate')
+        # Fit line for SpEd percentage vs Graduation rate
+        m, b = np.polyfit(self.df['sped_percent'], self.df['Total Grads - % of cohort'], 1)
+        plt.plot(self.df['sped_percent'], m*self.df['sped_percent'] + b, color='green', linestyle='-', linewidth=1)
+        plt.title('Special Education Percentage vs. Graduation Rate')
+        plt.xlabel('Special Education Percentage')
+        plt.ylabel('Graduation Rate (%)')
+        plt.legend()
+
+        plt.tight_layout()
+        plt.show()
+
     def analyze_and_plot_data(self):
         self.df['Total Grads - % of cohort'] = pd.to_numeric(self.df['Total Grads - % of cohort'], errors='coerce')
         self.df['Total Regents - % of cohort'] = pd.to_numeric(self.df['Total Regents - % of cohort'], errors='coerce')

@@ -71,13 +71,11 @@ class EDAPerformer:
     def plot_histogram_and_boxplot(self, column):
         fig, axes = plt.subplots(1, 2, figsize=(15, 6))
 
-        # 绘制直方图
         sns.histplot(data=self.df, x=column, bins=30, kde=True, ax=axes[0])
         axes[0].set_title(f'Histogram of {column}')
         axes[0].set_xlabel(column)
         axes[0].set_ylabel('Frequency')
 
-        # 绘制箱线图
         sns.boxplot(data=self.df, x=column, ax=axes[1])
         axes[1].set_title(f'Boxplot of {column}')
         axes[1].set_xlabel(column)
@@ -89,3 +87,16 @@ class EDAPerformer:
         numeric_columns = self.df.select_dtypes(include=['number']).columns
         for column in numeric_columns:
             self.plot_histogram_and_boxplot(column)
+
+    def plot_dropout_rates(self):
+        school_dropout_rates = self.df.groupby('name')['Dropped Out - % of cohort'].mean().sort_values(ascending=False)
+        top_schools = school_dropout_rates.head(20) 
+
+        plt.figure(figsize=(10, 8))
+        sns.barplot(x=top_schools.values, y=top_schools.index)
+
+        plt.title('Average Dropout Rates by School')
+        plt.xlabel('Average Dropout Rate (%)')
+        plt.ylabel('name')
+
+        plt.show()

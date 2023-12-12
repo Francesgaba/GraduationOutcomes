@@ -1,6 +1,7 @@
 import requests
 import pandas as pd
 from requests.exceptions import HTTPError
+from scipy.stats.mstats import winsorize
 
 class APIClient:
     def __init__(self, api_url, limit=1000):
@@ -102,6 +103,13 @@ class DataProcess:
         df['ell_percent'].fillna(median_ell_percent, inplace=True)
 
         return df
+
+    def apply_winsorization(self, df):
+        for column in df:
+            df[column] = winsorize(df[column], limits=[0.05, 0.05])
+        return df
+
+    
 
     
 
